@@ -4,12 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
+  <groupId>ru.job4j</groupId>
   <artifactId>job4j_chat</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
 
-  <name>job4j_chat Maven Webapp</name>
+  <name>job4j_rest Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
@@ -29,7 +29,7 @@
   </dependencies>
 
   <build>
-    <finalName>job4j_chat</finalName>
+    <finalName>job4j_rest</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>
@@ -64,4 +64,7 @@
       </plugins>
     </pluginManagement>
   </build>
+  <modules>
+    <module>auth</module>
+  </modules>
 </project>
