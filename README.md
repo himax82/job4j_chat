@@ -1,0 +1,2 @@
+[![Build Status](https://app.travis-ci.com/himax82/job4j_car_accident.svg?branch=master)](https://app.travis-ci.com/himax82/job4j_car_accident)
+[![codecov](https://codecov.io/gh/himax82/job4j_car_accident/branch/master/graph/badge.svg?token=8TNVE6B42V)](https://codecov.io/gh/himax82/job4j_car_accident)
