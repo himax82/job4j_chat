@@ -28,8 +28,10 @@ public class PersonService {
     }
 
     public Person save(Person person) {
-        Optional<Role> role = roleRepository.findById(person.getRole().getId());
-        person.setRole(role.orElse(new Role()));
+        if (person.getRole() == null) {
+            person.setRole(roleRepository.findByName("ROLE_USER").get());
+        }
+        System.out.println("перед сохранением");
         return personRepository.save(person);
     }
 
