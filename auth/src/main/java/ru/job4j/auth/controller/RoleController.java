@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.auth.domain.Person;
 import ru.job4j.auth.domain.Role;
+import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.RoleService;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -63,6 +65,19 @@ public class RoleController {
                         HttpStatus.NOT_FOUND, "Role with id " + id + " is not found."
                 ));
         service.delete(role);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Void> patch(@RequestBody Role role)
+            throws InvocationTargetException, IllegalAccessException {
+        Role existingRole = service.findById(role.getId()).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Role with id " + role.getId() + " is not found."
+                ));
+
+        Role patch = (Role) new PatchService<>().getPatch(existingRole, role);
+        service.save(patch);
         return ResponseEntity.ok().build();
     }
 }

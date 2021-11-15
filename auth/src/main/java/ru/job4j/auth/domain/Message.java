@@ -70,6 +70,10 @@ public class Message {
         this.room = room;
     }
 
+    public void setText(String text) {
+        this.text = text;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

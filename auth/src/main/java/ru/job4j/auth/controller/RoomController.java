@@ -1,28 +1,38 @@
 package ru.job4j.auth.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.auth.domain.Room;
+import ru.job4j.auth.dto.RoomDto;
+import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.RoomService;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/room")
 public class RoomController {
     private final RoomService service;
+    private final ModelMapper modelMapper;
 
-    public RoomController(RoomService service) {
+    public RoomController(RoomService service, ModelMapper modelMapper) {
         this.service = service;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/")
-    public List<Room> findAll() {
-        return service.findAll();
+    public List<RoomDto> findAll() {
+        return service.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -59,5 +69,22 @@ public class RoomController {
         room.setId(id);
         service.delete(room);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Void> patch(@RequestBody Room room)
+            throws InvocationTargetException, IllegalAccessException {
+        Room existingRoom = service.findById(room.getId()).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Room with id " + room.getId() + " is not found."
+                ));
+
+        Room patch = (Room) new PatchService<>().getPatch(existingRoom, room);
+        service.save(patch);
+        return ResponseEntity.ok().build();
+    }
+
+    private RoomDto convertToDto(Room room) {
+        return modelMapper.map(room, RoomDto.class);
     }
 }

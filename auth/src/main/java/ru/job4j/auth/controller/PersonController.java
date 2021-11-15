@@ -6,8 +6,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.auth.domain.Person;
+import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.PersonService;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,6 +73,23 @@ public class PersonController {
                         HttpStatus.NOT_FOUND, "Person with id " + id + " is not found."
                 ));
         service.delete(person);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Void> patch(@RequestBody Person person)
+            throws InvocationTargetException, IllegalAccessException {
+        Person existingPerson = service.findById(person.getId()).orElseThrow(() ->
+                new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Person with id " + person.getId() + " is not found."
+                ));
+
+        if (person.getPassword() != null) {
+            person.setPassword(encoder.encode(person.getPassword()));
+        }
+
+        Person patch = (Person) new PatchService<>().getPatch(existingPerson, person);
+        service.save(patch);
         return ResponseEntity.ok().build();
     }
 }
