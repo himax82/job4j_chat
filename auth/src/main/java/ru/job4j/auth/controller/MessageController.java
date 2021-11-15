@@ -1,6 +1,7 @@
 package ru.job4j.auth.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -35,12 +36,15 @@ public class MessageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Message> findById(@PathVariable int id) {
+    public ResponseEntity<String> findById(@PathVariable int id) {
         Message message = service.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Message with id " + id + " is not found."
                 ));
-        return new ResponseEntity<>(message, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.TEXT_PLAIN)
+                .contentLength(message.getText().length())
+                .body(message.getText());
     }
 
     @PostMapping("/")
@@ -63,7 +67,9 @@ public class MessageController {
         message.setRoom(room);
         message.setCreated(LocalDateTime.now());
 
-        return new ResponseEntity<>(service.save(message), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(message);
     }
 
     @PutMapping("/")
