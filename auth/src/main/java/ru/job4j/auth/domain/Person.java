@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,8 +19,11 @@ public class Person {
     private int id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name mustn't be empty")
     private String username;
 
+    @NotBlank(message = "Password mustn't be empty")
+    @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
     @ManyToOne(fetch = FetchType.LAZY)

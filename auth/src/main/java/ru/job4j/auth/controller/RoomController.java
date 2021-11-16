@@ -10,6 +10,7 @@ import ru.job4j.auth.dto.RoomDto;
 import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.RoomService;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
@@ -46,14 +47,14 @@ public class RoomController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Room> create(@RequestBody Room room) {
+    public ResponseEntity<Room> create(@Valid @RequestBody Room room) {
         Objects.requireNonNull(room.getName(), "Name mustn't be empty");
 
         return new ResponseEntity<>(service.save(room), HttpStatus.CREATED);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Room room) {
+    public ResponseEntity<Void> update(@Valid @RequestBody Room room) {
         Objects.requireNonNull(room.getName(), "Name mustn't be empty");
 
         service.findById(room.getId()).orElseThrow(() -> new ResponseStatusException(

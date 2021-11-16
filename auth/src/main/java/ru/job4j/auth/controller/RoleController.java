@@ -10,6 +10,7 @@ import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.RoleService;
 
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
@@ -40,14 +41,14 @@ public class RoleController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Role> create(@RequestBody Role role) {
+    public ResponseEntity<Role> create(@Valid @RequestBody Role role) {
         Objects.requireNonNull(role.getAuthority(), "Authority mustn't be empty");
 
         return new ResponseEntity<>(service.save(role), HttpStatus.CREATED);
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Role role) {
+    public ResponseEntity<Void> update(@Valid @RequestBody Role role) {
         Objects.requireNonNull(role.getAuthority(), "Authority mustn't be empty");
 
         service.findById(role.getId()).orElseThrow(() -> new ResponseStatusException(

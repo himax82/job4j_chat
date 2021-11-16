@@ -15,6 +15,7 @@ import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.PersonService;
 import ru.job4j.auth.service.RoomService;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -57,7 +58,7 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<MessageDto> create(@RequestBody MessageDto messageDto) {
+    public ResponseEntity<MessageDto> create(@Valid @RequestBody MessageDto messageDto) {
         Objects.requireNonNull(messageDto.getText(), "Text mustn't be empty");
         if (messageDto.getPersonId() == 0) {
             throw new NullPointerException("Person's id mustn't be 0");
@@ -73,7 +74,7 @@ public class MessageController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody MessageDto messageDto) {
+    public ResponseEntity<Void> update(@Valid @RequestBody MessageDto messageDto) {
         Objects.requireNonNull(messageDto.getText(), "Text mustn't be empty");
         if (messageDto.getPersonId() == 0) {
             throw new NullPointerException("Person's id mustn't be 0");

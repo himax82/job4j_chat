@@ -9,6 +9,7 @@ import ru.job4j.auth.domain.Person;
 import ru.job4j.auth.service.PatchService;
 import ru.job4j.auth.service.PersonService;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class PersonController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Person> register(@RequestBody Person person) {
+    public ResponseEntity<Person> register(@Valid @RequestBody Person person) {
         Objects.requireNonNull(person.getUsername(), "Name mustn't be empty");
         Objects.requireNonNull(person.getPassword(), "Password mustn't be empty");
 
@@ -50,7 +51,7 @@ public class PersonController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Person person) {
+    public ResponseEntity<Void> update(@Valid @RequestBody Person person) {
         Objects.requireNonNull(person.getUsername(), "Name mustn't be empty");
         Objects.requireNonNull(person.getPassword(), "Password mustn't be empty");
 
